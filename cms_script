@@ -1,8 +1,7 @@
-String TYPE = 'LR ABM';
-String DEFAULTT = 'Member';
-String RESPONDED = 'In Pipeline';
-
-Set<String> s1 = new Set<String>{'Member','Not Active','Prospecting','Engaged','In Pipeline'};
+String TYPE = 'LR Event';
+String DEFAULTT = 'Invited';
+Set<String> RESPONDED = new Set<String>{'Registered', 'Attended','Engaged','No Show','Visited booth'};
+Set<String> s1 = new Set<String>{'Invited','Engaged','Registered','Attended','No Show','Pending','Declined', 'Cancelled', 'Visited booth'};
 
 
 List<campaignmemberStatus> cmsd = new List<campaignmemberStatus>();
@@ -15,7 +14,7 @@ for(campaignmemberStatus cs: [select id,Label, SortOrder, HasResponded, Campaign
 			cs.isDefault = true;
 			addu = true;
 		}		
-		if(cs.Label == RESPONDED){
+		if(RESPONDED.contains(cs.Label)){
 			addu = true;
 			cs.HasResponded = true;
 		}
@@ -32,3 +31,7 @@ for(campaignmemberStatus cs: [select id,Label, SortOrder, HasResponded, Campaign
 if(cmsu.isEmpty() == false){
  update cmsu;
 }
+if(cmsd.isEmpty() == false){
+ database.delete(cmsd, false);
+}
+
